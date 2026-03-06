@@ -10,6 +10,8 @@ Tresoflow is a cash transfer point management platform for a network of money tr
 
 - **Frontend:** React 19 with JSX (no TypeScript yet)
 - **Build tool:** Vite 8 (beta) with `@vitejs/plugin-react`
+- **Backend:** Node.js + NestJS (planned)
+- **Database:** PostgreSQL (planned)
 - **Linter:** ESLint 9 (flat config) with `react-hooks` and `react-refresh` plugins
 - **Deployment:** Railway (Nixpacks builder, serves static `dist/` via `npx serve`)
 
@@ -61,9 +63,36 @@ tresoflow/
 - Always run `npm run lint` before committing
 - Keep commits focused and descriptive
 
-## Key Architectural Notes
+## Key Architectural Decisions
 
-- No backend exists yet — one will need to be added for partner API integrations and cashier management
-- No routing library installed yet — will need `react-router-dom` when multi-page navigation is added
-- No state management library yet — evaluate needs as the app grows (Context API may suffice initially)
-- No testing framework configured yet
+- **Backend:** NestJS with PostgreSQL — chosen for structured modules and robust relational data handling suited to financial transactions
+- **Development priorities:** Cashier management and partner API integrations in parallel
+- **Partner integrations:** Western Union, Ria, MoneyGram, Wave, KPay, Orange Money, insurance companies, DHL
+- **Routing:** Will use `react-router-dom` when multi-page navigation is added
+- **State management:** Evaluate as the app grows (Context API may suffice initially)
+- **Testing:** No framework configured yet
+
+## Planned Backend Structure (NestJS)
+
+```
+backend/
+├── src/
+│   ├── app.module.ts           # Root module
+│   ├── main.ts                 # NestJS entry point
+│   ├── cashiers/               # Cashier management module
+│   │   ├── cashiers.controller.ts
+│   │   ├── cashiers.service.ts
+│   │   ├── cashiers.module.ts
+│   │   └── entities/
+│   ├── partners/               # Partner API integrations module
+│   │   ├── partners.controller.ts
+│   │   ├── partners.service.ts
+│   │   ├── partners.module.ts
+│   │   └── integrations/       # Per-partner adapters (WU, Ria, Wave, etc.)
+│   ├── reports/                # Daily reporting module
+│   ├── auth/                   # Authentication module
+│   └── common/                 # Shared DTOs, guards, interceptors
+├── package.json
+├── tsconfig.json
+└── nest-cli.json
+```
